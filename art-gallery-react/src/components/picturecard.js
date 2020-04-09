@@ -14,7 +14,6 @@ const useStyles = makeStyles({
 
 export function PictureCard(props) {
     const { pictureInfo: { title, route } } = props;
-    console.log(props, 'asdasdasd')
     const classes = useStyles();
 
     return (

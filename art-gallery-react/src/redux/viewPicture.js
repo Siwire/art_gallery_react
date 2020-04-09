@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchPictures } from '../redux/actions';
+import { fetchPictures } from './pictureActions';
 import { PictureCard } from '../components/picturecard';
 import Grid from '@material-ui/core/Grid';
 
-function UserContainer({ picture, fetchPictures }) {
+function PictureCards({ picture, fetchPictures }) {
     const { pictures } = picture;
     useEffect(() => {
         fetchPictures();
@@ -24,7 +24,6 @@ function UserContainer({ picture, fetchPictures }) {
 }
 
 const mapStateToProps = state => {
-    console.log(state, '33333333333333')
     return {
         picture: state.picture
     }
@@ -35,4 +34,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(PictureCards);

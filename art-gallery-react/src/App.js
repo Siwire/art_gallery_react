@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import './App.css';
 import { Header } from './components/header';
 import { ViewPictures } from './components/viewpictures';
+import { ToolBar } from './components/toolbar'
 
 function App() {
   return (
@@ -12,12 +13,13 @@ function App() {
         <Grid item xs={10}>
           <header className="App-header">
             <Header />
+            <ToolBar />
             <ViewPictures />
           </header>
         </Grid>
         <Grid item xs={1} />
       </Grid>
-        
+
     </div>
   );
 }

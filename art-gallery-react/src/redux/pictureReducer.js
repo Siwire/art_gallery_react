@@ -5,7 +5,6 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-    console.log(action, '222222222222')
     switch (action.type) {
         case FETCH_PICTURE_REQUEST:
             return {
