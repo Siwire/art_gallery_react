@@ -4,7 +4,7 @@ import filterReducer from './filterReducer';
 
 const rootReducer = combineReducers({
     picture: pictureReducer,
-    filter: filterReducer
+    filter: filterReducer,
 });
 
 export default rootReducer;
