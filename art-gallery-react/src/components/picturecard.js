@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 });
 
 export function PictureCard(props) {
-    const { pictureInfo: { title, route } } = props;
+    const { pictureInfo: { title, route, _id } } = props;
     const classes = useStyles();
 
     return (

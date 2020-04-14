@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage })
 
-module.exports = function (app, cityCollection) {
+module.exports = function (app) {
 
     app.post('/picture', upload.single('file'), async (req, res) => {
         const pictureInfo = req.body;
