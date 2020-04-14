@@ -11,11 +11,11 @@ function App() {
       <Grid container spacing={0}>
         <Grid item xs={1} />
         <Grid item xs={10}>
-          <header className="App-header">
+          <Grid className="App-viewpicture">
             <Header />
             <ToolBar />
             <ViewPictures />
-          </header>
+          </Grid>
         </Grid>
         <Grid item xs={1} />
       </Grid>
