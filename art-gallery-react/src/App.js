@@ -1,7 +1,9 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import './App.css';
-import { Header } from './components/header';
+import store from './redux/store';
+import Header from './components/header';
 import { ViewPictures } from './components/viewpictures';
 import { ToolBar } from './components/toolbar'
 
@@ -12,7 +14,9 @@ function App() {
         <Grid item xs={1} />
         <Grid item xs={10}>
           <Grid className="App-viewpicture">
-            <Header />
+            <Provider store={store}>
+              <Header />
+            </Provider>
             <ToolBar />
             <ViewPictures />
           </Grid>

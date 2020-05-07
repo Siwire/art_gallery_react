@@ -14,13 +14,12 @@ const upload = multer({ storage: storage })
 
 module.exports = function (app) {
 
-    app.post('/picture', upload.single('file'), async (req, res) => {
+    app.post('/picture',  upload.single('file'), async (req, res) => {
         const pictureInfo = req.body;
         const path = `${req.file.originalname}`;
         const savedPicture = await Picture.create({ title: pictureInfo.title, route: path, size: pictureInfo.size, style: pictureInfo.style, color: pictureInfo.colors })
         res.send(savedPicture);
     });
-
     app.get('/initdata', async (req, res) => {
         const sizes = await Size.find();
         const styles = await Style.find();
@@ -28,6 +27,10 @@ module.exports = function (app) {
         res.send({ sizes: sizes, styles: styles, colors: colors });
     });
     app.get('/pictures', async (req, res) => {
+
+        
+
+
         const pictures = await Picture.find().populate('size').populate('style').populate('color');
         const newPictures = pictures.map((picture) => {
             const pictureRoute = `http://localhost:8000/picturefile?path=${picture.route}`;
@@ -35,7 +38,6 @@ module.exports = function (app) {
         });
         res.send({ pictures: newPictures });
     });
-
     app.get('/picturefile', async (req, res) => {
         const path = req.query.path;
         res.sendFile(path, { root: './uploads/'});

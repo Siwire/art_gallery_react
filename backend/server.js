@@ -20,11 +20,11 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true });
 Size.countDocuments().then((count) => {
   if (!count) {
     const sizes = [
-      {name: 'A1'},
-      {name: 'A2'},
-      {name: 'A3'},
-      {name: 'A4'},
-      {name: 'A5'},
+      { name: 'A1' },
+      { name: 'A2' },
+      { name: 'A3' },
+      { name: 'A4' },
+      { name: 'A5' },
     ];
     Size.insertMany(sizes);
   }
@@ -32,9 +32,9 @@ Size.countDocuments().then((count) => {
 Style.countDocuments().then((count) => {
   if (!count) {
     const styles = [
-      {name: 'pencil'},
-      {name: 'pastel'},
-      {name: 'watercolor'},
+      { name: 'pencil' },
+      { name: 'pastel' },
+      { name: 'watercolor' },
 
     ];
     Style.insertMany(styles);
@@ -43,11 +43,11 @@ Style.countDocuments().then((count) => {
 Color.countDocuments().then((count) => {
   if (!count) {
     const colors = [
-      {name: 'black'},
-      {name: 'grey'},
-      {name: 'green'},
-      {name: 'red'},
-      {name: 'yellow'},
+      { name: 'black' },
+      { name: 'grey' },
+      { name: 'green' },
+      { name: 'red' },
+      { name: 'yellow' },
     ];
     Color.insertMany(colors);
   }
@@ -66,7 +66,7 @@ Picture.countDocuments().then(async (count) => {
         style: styles.find((style) => style.name === 'pastel'),
       },
       {
-        title: 'Toscany',
+        title: 'Tuscany',
         route: 'tuscany.PNG',
         size: sizes.find((size) => size.name === 'A4'),
         color: colors.find((color) => color.name === 'grey'),
@@ -85,9 +85,10 @@ Picture.countDocuments().then(async (count) => {
   }
 });
 require('./pictures_routes')(app);
-  app.listen(port, () => {
-    console.log('Live on ' + port);
-  });
+require('./users_routes')(app);
+app.listen(port, () => {
+  console.log('Live on ' + port);
+});
 /*
 const pic = new Picture({ name: 'Winter' });
 pic.save().then(() => console.log('wow'))

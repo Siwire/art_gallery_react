@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import store from '../redux/store';
 import { connect } from 'react-redux';
 import { fetchFilters } from './filterAction';
 import Grid from '@material-ui/core/Grid';
@@ -12,11 +13,12 @@ import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { Divider } from '@material-ui/core';
-import { fetchUploadPicture, setFieldValueAction } from './pictureActions'
+import { fetchUploadPicture, setFieldValueAction } from './pictureActions';
+
 const url = 'http://localhost:8000';
 
 
-function AddPicture({ filter, fetchFilters, pictureInfo, fetchUploadPicture, setFieldValueAction }) {
+function AddPicture({ currentUser, filter, fetchFilters, pictureInfo, fetchUploadPicture, setFieldValueAction }) {
     const { filters } = filter;
 
     useEffect(() => {
@@ -24,7 +26,7 @@ function AddPicture({ filter, fetchFilters, pictureInfo, fetchUploadPicture, set
     }, []);
     console.log(pictureInfo, 111111111);
 
-    const [addSizeValue, setSizeValue] = React.useState('');
+    /*const [addSizeValue, setSizeValue] = React.useState('');
     const [addStyleValue, setStyleValue] = React.useState('');
     const [addColorValue, setColorValue] = React.useState('');
     //const [filePicture, setFilePicture] = React.useState({file: null})
@@ -43,31 +45,28 @@ function AddPicture({ filter, fetchFilters, pictureInfo, fetchUploadPicture, set
     const inputName = (event) => {
         setName(event.target.value);
     };
-
+*/
     const setFieldValue = (event) => {
-        console.log(event.target.name);
         if (event.target.files && event.target.files[0]) {
             setFieldValueAction(event.target.name, event.target.files[0]);
         } else {
             setFieldValueAction(event.target.name, event.target.value);
         }
+
     }
-
-    /*const dropUploadFile = (e) => {
-        if (e.target.files[0]) {
-            console.log(e.target.files[0], 'sadasdsaddsa');
-            setFilePicture({file: e.target.files[0]} )
-            console.log(filePicture, 'sadasdsaddsa');
-        }
-       
-        
-    }*/
-
+    let fileInput = '';
     const onFormSubmit = (e) => {
         e.preventDefault();
-        console.log(e)
         // const data = e.target.files[0];
-        fetchUploadPicture(pictureInfo);
+        if (currentUser.isAuthorized) {
+            fetchUploadPicture(pictureInfo)
+        }
+        else { console.log('ERROR LOGIN') };
+        console.log(pictureInfo);
+        Object.keys(pictureInfo).forEach(name=> {
+            setFieldValueAction(name, '');
+        });
+        fileInput.value = "";
     }
 
     const useStyles = makeStyles(() => ({
@@ -87,7 +86,7 @@ function AddPicture({ filter, fetchFilters, pictureInfo, fetchUploadPicture, set
                     <Grid className={classes.parametres}>
                         <FormControl variant="outlined">
                             <InputLabel htmlFor="component-outlined">Input name picture</InputLabel>
-                            <OutlinedInput id="component-outlined" value={pictureInfo._id} name='title' onChange={setFieldValue} label="Name" />
+                            <OutlinedInput id="component-outlined" value={pictureInfo.title} name='title' onChange={setFieldValue} label="Name" />
                         </FormControl>
                     </Grid>
                     <Grid className={classes.parametres}>
@@ -98,6 +97,7 @@ function AddPicture({ filter, fetchFilters, pictureInfo, fetchUploadPicture, set
                             type="file"
                             name="file"
                             onChange={setFieldValue}
+                            ref={ref=> fileInput = ref}
                         />
 
                     </Grid>
@@ -143,9 +143,11 @@ function AddPicture({ filter, fetchFilters, pictureInfo, fetchUploadPicture, set
 const mapStateToProps = state => {
     return {
         filter: state.filter,
-        pictureInfo: state.picture.pictureInfo
+        pictureInfo: state.picture.pictureInfo,
+        currentUser: state.signup.currentUser,
     }
 }
+
 const mapDispatchToProps = dispatch => {
     return {
         fetchFilters: () => dispatch(fetchFilters()),

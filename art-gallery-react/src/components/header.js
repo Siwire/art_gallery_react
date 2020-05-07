@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import store from '../redux/store';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import Modal from '@material-ui/core/Modal';
 import { ViewAddPicture } from './addpicture'
-import { SignUpForm } from '../redux/viewSignUp'
+import SignUpForm from '../redux/viewSignUp'
 import Fade from '@material-ui/core/Fade';
+import { Provider } from 'react-redux';
+import { getProfileFetch, logoutUser } from '../redux/signup/signupAction'
+
 function getModalStyle() {
     const top = 50;
     const left = 50;
@@ -18,7 +23,12 @@ function getModalStyle() {
     };
 }
 
-export function Header() {
+function Header({ currentUser, getProfileFetch, logoutUser }) {
+    useEffect(() => {
+        getProfileFetch();
+    }, []);
+    console.log(currentUser, 'ddffddf');
+    
     const useStyles = makeStyles((theme) => ({
         container: {
             height: 225,
@@ -39,7 +49,7 @@ export function Header() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            
+
             border: '2px solid #000',
         },
         paper: {
@@ -67,9 +77,20 @@ export function Header() {
         setOpenSignUp(true)
     }
     const signUpClose = () => {
-        setOpenSignUp(true)
+        console.log();
+        
+        setOpenSignUp(false)
     }
-    
+
+
+    const handleLogoutClick = event => {
+        event.preventDefault();
+        localStorage.removeItem("token");
+        setOpenSignUp(false);
+        console.log(openSignUp, 'openSignUp');
+        
+        logoutUser();
+    }
 
     return (
         <Grid container spacing={0} justify="space-between" className={classes.container}>
@@ -78,7 +99,7 @@ export function Header() {
                     <Button
                         variant="text"
                         startIcon={<InstagramIcon />}
-                        href="https://google.com"
+                        href="http://instagram.com/ivan.painter/"
                         className={classes.instagram}
                     >
                         <label>
@@ -90,7 +111,8 @@ export function Header() {
             </Grid>
             <Grid>
                 <Grid container direction="row">
-                    <Button variant="contained" className={classes.button} onClick={handleOpen}>Add Picture</Button>
+                    {currentUser && currentUser.isAuthorized ?
+                    <Button variant="contained" className={classes.button} onClick={handleOpen}>Add Picture</Button>:<p/>}
                     <Modal className={classes.modal}
                         open={open}
                         onClose={handleClose}
@@ -99,13 +121,15 @@ export function Header() {
                             <ViewAddPicture />
                         </Fade>
                     </Modal>
-                    <Button variant="contained" onClick={signUpOpen}>Login</Button>
+                    {currentUser && currentUser.isAuthorized ? <Button onClick={handleLogoutClick}>Log Out</Button> : <Button variant="contained" onClick={signUpOpen}>Login</Button>}
                     <Modal className={classes.modal}
                         open={openSignUp}
                         onClose={signUpClose}
                     >
                         <Fade style={modalStyle} className={classes.paper}>
-                            <SignUpForm />
+                            <Provider store={store} >
+                                <SignUpForm setOpenSignUp={setOpenSignUp}/>
+                            </Provider>
                         </Fade>
                     </Modal>
                 </Grid>
@@ -118,4 +142,14 @@ export function Header() {
         </Grid>
     );
 }
+const mapStateToProps = state => {
+    return {
+        currentUser: state.signup.currentUser
+    }
+}
+const mapDispatchToProps = dispatch => ({
+    getProfileFetch: () => dispatch(getProfileFetch()),
+    logoutUser: () => dispatch(logoutUser())
+});
 
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
