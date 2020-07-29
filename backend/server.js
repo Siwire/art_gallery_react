@@ -52,7 +52,7 @@ Color.countDocuments().then((count) => {
     Color.insertMany(colors);
   }
 });
-Picture.countDocuments().then(async (count) => {
+/*Picture.countDocuments().then(async (count) => {
   if (!count) {
     const sizes = await Size.find();
     const styles = await Style.find();
@@ -83,7 +83,7 @@ Picture.countDocuments().then(async (count) => {
     ];
     Picture.insertMany(pictures);
   }
-});
+});*/
 require('./pictures_routes')(app);
 require('./users_routes')(app);
 app.listen(port, () => {

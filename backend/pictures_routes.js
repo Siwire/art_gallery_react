@@ -17,7 +17,7 @@ module.exports = function (app) {
     app.post('/picture',  upload.single('file'), async (req, res) => {
         const pictureInfo = req.body;
         const path = `${req.file.originalname}`;
-        const savedPicture = await Picture.create({ title: pictureInfo.title, route: path, size: pictureInfo.size, style: pictureInfo.style, color: pictureInfo.colors })
+        const savedPicture = await Picture.create({ title: pictureInfo.title, route: path, size: pictureInfo.size, style: pictureInfo.style, color: pictureInfo.color })
         res.send(savedPicture);
     });
     app.get('/initdata', async (req, res) => {
@@ -27,11 +27,7 @@ module.exports = function (app) {
         res.send({ sizes: sizes, styles: styles, colors: colors });
     });
     app.get('/pictures', async (req, res) => {
-
-        
-
-
-        const pictures = await Picture.find().populate('size').populate('style').populate('color');
+        const pictures = await Picture.find({ }).populate('size').populate('style').populate('color');
         const newPictures = pictures.map((picture) => {
             const pictureRoute = `http://localhost:8000/picturefile?path=${picture.route}`;
             return { ...picture._doc, route: pictureRoute };
@@ -41,5 +37,10 @@ module.exports = function (app) {
     app.get('/picturefile', async (req, res) => {
         const path = req.query.path;
         res.sendFile(path, { root: './uploads/'});
+    });
+    app.delete('/picture/:id', async (req, res) => {
+        const id = req.params.id;
+        await Picture.deleteOne({ _id: id });
+        res.send({ id });
     });
 };
