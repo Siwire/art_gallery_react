@@ -25,7 +25,6 @@ export function LoginForm({ userLoginFetch }) {
     const [open, setOpen] = React.useState(
         false);
     const handleChange = event => {
-        console.log(event.target.name)
         setLoginInfo({
             ...loginInfo,
             [event.target.name]: event.target.value

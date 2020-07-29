@@ -27,7 +27,6 @@ function Header({ currentUser, getProfileFetch, logoutUser }) {
     useEffect(() => {
         getProfileFetch();
     }, []);
-    console.log(currentUser, 'ddffddf');
     
     const useStyles = makeStyles((theme) => ({
         container: {
@@ -77,8 +76,6 @@ function Header({ currentUser, getProfileFetch, logoutUser }) {
         setOpenSignUp(true)
     }
     const signUpClose = () => {
-        console.log();
-        
         setOpenSignUp(false)
     }
 
@@ -87,8 +84,6 @@ function Header({ currentUser, getProfileFetch, logoutUser }) {
         event.preventDefault();
         localStorage.removeItem("token");
         setOpenSignUp(false);
-        console.log(openSignUp, 'openSignUp');
-        
         logoutUser();
     }
 

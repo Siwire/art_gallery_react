@@ -26,7 +26,6 @@ export function RegisterForm({ userPostFetch }) {
     const classes = useStyles();
 
     const handleChange = event => {
-        console.log(event.target.name)
         setRegisterInfo({
             ...registerInfo,
             [event.target.name]: event.target.value

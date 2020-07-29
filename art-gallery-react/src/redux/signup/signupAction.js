@@ -43,12 +43,11 @@ export const userLoginFetch = user => {
     })
       .then(resp => resp.json())
       .then(data => {
-      console.log(data);
         if (data.message) {
           //тут ваша логика
         } else {
           localStorage.setItem("token", data.jwt)
-          dispatch(loginUser({...data, isAuthorized: true}))
+          dispatch(loginUser({ ...data, isAuthorized: true }))
         }
       })
   }
