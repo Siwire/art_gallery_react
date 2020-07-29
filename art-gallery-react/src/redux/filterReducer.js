@@ -8,8 +8,6 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-    console.log(action, 'here 3');
-    
     switch (action.type) {
         case FETCH_FILTER_REQUEST:
             return {
@@ -21,7 +19,6 @@ const reducer = (state = initialState, action) => {
                 filters: action.payload
             }
         case SIZE_FILTER_VALUE:
-            console.log(action.payload, 133232323232);
             return {
                 ...state,
                 sizeValue: action.payload

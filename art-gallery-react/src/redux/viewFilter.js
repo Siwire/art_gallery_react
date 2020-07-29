@@ -12,10 +12,10 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Button from '@material-ui/core/Button';
-import { changeSizeFilterValue } from './filterAction'
-import { changeStyleFilterValue } from './filterAction'
-import { changeColorFilterValue } from './filterAction'
-import { clearFilterValue } from './filterAction'
+// import { changeSizeFilterValue } from './filterAction'
+// import { changeStyleFilterValue } from './filterAction'
+// import { changeColorFilterValue } from './filterAction'
+import { clearFilterValue, changeSizeFilterValue, changeStyleFilterValue, changeColorFilterValue, setFilteredPicturesArray } from './filterAction'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function RadioFilter({ filter, fetchFilters, changeSizeFilter, changeStyleFilter, changeColorFilter, clearFilters }) {
+function RadioFilter({ filter, fetchFilters, changeSizeFilter, changeStyleFilter, changeColorFilter, clearFilters, setFilteredPicturesArray }) {
     const { filters } = filter;
     const { sizeValue } = filter;
     const { styleValue } = filter;
@@ -44,16 +44,18 @@ function RadioFilter({ filter, fetchFilters, changeSizeFilter, changeStyleFilter
 
 
     const radioChangeSize = (event) => {
-        changeSizeFilter(event.target.value)
+        changeSizeFilter(event.target.value);
+        setFilteredPicturesArray({ sizeValue: event.target.value, styleValue, colorValue });
     }
     const radioChangeStyle = (event) => {
-        changeStyleFilter(event.target.value)
+        changeStyleFilter(event.target.value);
+        setFilteredPicturesArray({ sizeValue, styleValue: event.target.value, colorValue });
     }
     const radioChangeColor = (event) => {
-        changeColorFilter(event.target.value)
+        changeColorFilter(event.target.value);
+        setFilteredPicturesArray({ sizeValue, styleValue, colorValue: event.target.value });
     }
     const clearFilterValueHandler = () => {
-        console.log('here');
         clearFilters();
     }
     return (
@@ -79,7 +81,7 @@ function RadioFilter({ filter, fetchFilters, changeSizeFilter, changeStyleFilter
                                 <FormLabel component="legend">Style</FormLabel>
                                 <RadioGroup aria-label="style" name="style" value={styleValue} onChange={radioChangeStyle} >
                                     {filters.styles && filters.styles.map(style => (
-                                        < FormControlLabel key={style._id} value={style.name} control={<Radio />} label={style.name} />
+                                        < FormControlLabel key={style._id} value={style._id} control={<Radio />} label={style.name} />
                                     ))}
                                 </RadioGroup>
                             </FormControl>
@@ -89,7 +91,7 @@ function RadioFilter({ filter, fetchFilters, changeSizeFilter, changeStyleFilter
                                 <FormLabel component="legend">Color</FormLabel>
                                 <RadioGroup aria-label="color" name="color" value={colorValue} onChange={radioChangeColor} >
                                     {filters.colors && filters.colors.map(color => (
-                                        < FormControlLabel key={color._id} value={color.name} control={<Radio />} label={color.name} />
+                                        < FormControlLabel key={color._id} value={color._id} control={<Radio />} label={color.name} />
                                     ))}
                                 </RadioGroup>
                             </FormControl>
@@ -102,8 +104,6 @@ function RadioFilter({ filter, fetchFilters, changeSizeFilter, changeStyleFilter
     )
 }
 const mapStateToProps = state => {
-    console.log(state, 'state');
-
     return {
         filter: state.filter
     }
@@ -114,7 +114,8 @@ const mapDispatchToProps = dispatch => {
         changeSizeFilter: (newValue) => dispatch(changeSizeFilterValue(newValue)),
         changeStyleFilter: (newValue) => dispatch(changeStyleFilterValue(newValue)),
         changeColorFilter: (newValue) => dispatch(changeColorFilterValue(newValue)),
-        clearFilters: () => dispatch(clearFilterValue())
+        clearFilters: () => dispatch(clearFilterValue()),
+        setFilteredPicturesArray: (filters) => dispatch(setFilteredPicturesArray(filters)),
     }
 }
 

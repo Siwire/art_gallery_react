@@ -7,7 +7,10 @@ import {
     STYLE_FILTER_VALUE,
     COLOR_FILTER_VALUE,
     CLEAR_FILTER_VALUE
+    
 } from './filterTypes';
+
+import { SET_FILTERED_PICTURES_ARRAY, RETURN_PICTURE } from './pictureTypes';
 
 export const fetchFilterRequest = () => {
     return {
@@ -32,6 +35,7 @@ const sendSizeValue = (sizeValue) => {
 export const changeSizeFilterValue = sizeValue => {
     return (dispatch) => {
         dispatch(sendSizeValue(sizeValue));
+        
     }
 }
 const sendStyleValue = (styleValue) => {
@@ -62,10 +66,15 @@ const sendClearFilterValue = () => {
         type: CLEAR_FILTER_VALUE, 
     }
 }
+const returnPicture = () => {
+    return {
+        type: RETURN_PICTURE,
+    }
+}
 export const clearFilterValue = () => {
-    console.log('here 2');
     return (dispatch) => {
         dispatch(sendClearFilterValue());
+        dispatch(returnPicture());
     }
 }
 export const fetchFilters = () => {
@@ -76,5 +85,18 @@ export const fetchFilters = () => {
                 const filters  = response.data;
                 dispatch(fetchFilterSuccess(filters))
             });
+    }
+}
+
+const filterPictureArray = (filters) => {
+    return {
+        type: SET_FILTERED_PICTURES_ARRAY,
+        payload: filters,
+    }
+}
+
+export const setFilteredPicturesArray = (filters) => {
+    return (dispatch) => {
+        dispatch(filterPictureArray(filters));
     }
 }
